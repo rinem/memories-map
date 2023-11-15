@@ -13,38 +13,38 @@ input CoordinatesInput {
   longitude: Float!
 }
 
-type House {
-  address: String!
-  bedrooms: Int!
-  id: ID!
-  image: String!
-  latitude: Float!
-  longitude: Float!
-  nearby: [House!]!
-  publicId: String!
-  userId: String!
-}
-
-input HouseInput {
-  address: String!
-  bedrooms: Int!
-  coordinates: CoordinatesInput!
-  image: String!
-}
-
 type ImageSignature {
   signature: String!
   timestamp: Int!
 }
 
+type Memory {
+  hearts: Int!
+  id: ID!
+  image: String!
+  latitude: Float!
+  longitude: Float!
+  message: String!
+  nearby: [Memory!]!
+  publicId: String!
+  userId: String!
+}
+
+input MemoryInput {
+  coordinates: CoordinatesInput!
+  hearts: Int!
+  image: String!
+  message: String!
+}
+
 type Mutation {
-  createHouse(input: HouseInput!): House
   createImageSignature: ImageSignature!
-  deleteHouse(id: String!): Boolean!
-  updateHouse(id: String!, input: HouseInput!): House
+  createMemory(input: MemoryInput!): Memory
+  deleteMemory(id: String!): Boolean!
+  updateMemory(id: String!, input: MemoryInput!): Memory
 }
 
 type Query {
-  house(id: String!): House
-  houses(bounds: BoundsInput!): [House!]!
+  memories(bounds: BoundsInput!): [Memory!]!
+  memory(id: String!): Memory
 }

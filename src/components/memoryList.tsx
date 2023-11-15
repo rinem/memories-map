@@ -1,27 +1,27 @@
 import Link from "next/link";
 import { Image } from "cloudinary-react";
-import { HousesQuery_houses } from "src/generated/HousesQuery";
+import { MemorysQuery_memories } from "src/generated/MemorysQuery";
 
 interface IProps {
-  houses: HousesQuery_houses[];
+  memories: MemorysQuery_memories[];
   setHighlightedId: (id: string | null) => void;
 }
 
-export default function HouseList({ houses, setHighlightedId }: IProps) {
+export default function MemoryList({ memories, setHighlightedId }: IProps) {
   return (
     <>
-      {houses.map((house) => (
-        <Link key={house.id} href={`/houses/${house.id}`}>
+      {memories.map((memory) => (
+        <Link key={memory.id} href={`/memories/${memory.id}`}>
           <div
             className="px-6 pt-4 cursor-pointer flex flex-wrap"
-            onMouseEnter={() => setHighlightedId(house.id)}
+            onMouseEnter={() => setHighlightedId(memory.id)}
             onMouseLeave={() => setHighlightedId(null)}
           >
             <div className="sm:w-full md:w-1/2">
               <Image
                 cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
-                publicId={house.publicId}
-                alt={house.address}
+                publicId={memory.publicId}
+                alt={memory.message}
                 secure
                 dpr="auto"
                 quality="auto"
@@ -32,8 +32,8 @@ export default function HouseList({ houses, setHighlightedId }: IProps) {
               />
             </div>
             <div className="sm:w-full md:w-1/2 sm:pl-0 md:pl-4">
-              <h2 className="text-lg">{house.address}</h2>
-              <p>{house.bedrooms} 🛌 house</p>
+              <h2 className="text-lg">{memory.message}</h2>
+              <p>{memory.hearts} 🛌 memory</p>
             </div>
           </div>
         </Link>

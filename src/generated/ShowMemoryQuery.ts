@@ -4,32 +4,32 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: ShowHouseQuery
+// GraphQL query operation: ShowMemoryQuery
 // ====================================================
 
-export interface ShowHouseQuery_house_nearby {
-  __typename: "House";
+export interface ShowMemoryQuery_memory_nearby {
+  __typename: "Memory";
   id: string;
   latitude: number;
   longitude: number;
 }
 
-export interface ShowHouseQuery_house {
-  __typename: "House";
+export interface ShowMemoryQuery_memory {
+  __typename: "Memory";
   id: string;
   userId: string;
-  address: string;
+  message: string;
   publicId: string;
-  bedrooms: number;
+  hearts: number;
   latitude: number;
   longitude: number;
-  nearby: ShowHouseQuery_house_nearby[];
+  nearby: ShowMemoryQuery_memory_nearby[];
 }
 
-export interface ShowHouseQuery {
-  house: ShowHouseQuery_house | null;
+export interface ShowMemoryQuery {
+  memory: ShowMemoryQuery_memory | null;
 }
 
-export interface ShowHouseQueryVariables {
+export interface ShowMemoryQueryVariables {
   id: string;
 }

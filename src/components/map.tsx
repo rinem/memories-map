@@ -4,21 +4,21 @@ import { Image } from "cloudinary-react";
 import ReactMapGL, { Marker, Popup, ViewState } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useLocalState } from "src/utils/useLocalState";
-import { HousesQuery_houses } from "src/generated/HousesQuery";
+import { MemorysQuery_memories } from "src/generated/MemorysQuery";
 import { SearchBox } from "./searchBox";
 
 interface IProps {
   setDataBounds: (bounds: string) => void;
-  houses: HousesQuery_houses[];
+  memories: MemorysQuery_memories[];
   highlightedId: string | null;
 }
 
-export default function Map({ setDataBounds, houses, highlightedId }: IProps) {
-  const [selected, setSelected] = useState<HousesQuery_houses | null>(null);
+export default function Map({ setDataBounds, memories, highlightedId }: IProps) {
+  const [selected, setSelected] = useState<MemorysQuery_memories | null>(null);
   const mapRef = useRef<ReactMapGL | null>(null);
   const [viewport, setViewport] = useLocalState<ViewState>("viewport", {
-    latitude: 43,
-    longitude: -79,
+    latitude: -28,
+    longitude: 77,
     zoom: 10,
   });
 
@@ -50,7 +50,7 @@ export default function Map({ setDataBounds, houses, highlightedId }: IProps) {
         <div className="absolute top-0 w-full z-10 p-4">
           <SearchBox
             defaultValue=""
-            onSelectAddress={(_address, latitude, longitude) => {
+            onSelectMessage={(_message, latitude, longitude) => {
               if (latitude && longitude) {
                 setViewport((old) => ({
                   ...old,
@@ -67,27 +67,27 @@ export default function Map({ setDataBounds, houses, highlightedId }: IProps) {
           />
         </div>
 
-        {houses.map((house) => (
+        {memories.map((memory) => (
           <Marker
-            key={house.id}
-            latitude={house.latitude}
-            longitude={house.longitude}
+            key={memory.id}
+            latitude={memory.latitude}
+            longitude={memory.longitude}
             offsetLeft={-15}
             offsetTop={-15}
-            className={highlightedId === house.id ? "marker-active" : ""}
+            className={highlightedId === memory.id ? "marker-active" : ""}
           >
             <button
               style={{ width: "30px", height: "30px", fontSize: "30px" }}
               type="button"
-              onClick={() => setSelected(house)}
+              onClick={() => setSelected(memory)}
             >
               <img
                 src={
-                  highlightedId === house.id
-                    ? "/home-color.svg"
-                    : "/home-solid.svg"
+                  highlightedId === memory.id
+                    ? "/heart-color.svg"
+                    : "/heart-solid.svg"
                 }
-                alt="house"
+                alt="memory"
                 className="w-8"
               />
             </button>
@@ -102,7 +102,7 @@ export default function Map({ setDataBounds, houses, highlightedId }: IProps) {
             closeOnClick={false}
           >
             <div className="text-center">
-              <h3 className="px-4">{selected.address.substr(0, 30)}</h3>
+              <h3 className="px-4">{selected.message.substr(0, 30)}</h3>
               <Image
                 className="mx-auto my-4"
                 cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
@@ -115,8 +115,8 @@ export default function Map({ setDataBounds, houses, highlightedId }: IProps) {
                 crop="fill"
                 gravity="auto"
               />
-              <Link href={`/houses/${selected.id}`}>
-                <a>View House</a>
+              <Link href={`/memories/${selected.id}`}>
+                <a>View Memory</a>
               </Link>
             </div>
           </Popup>

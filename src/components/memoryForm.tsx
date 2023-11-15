@@ -6,13 +6,13 @@ import Link from "next/link";
 import { Image } from "cloudinary-react";
 import { SearchBox } from "./searchBox";
 import {
-  CreateHouseMutation,
-  CreateHouseMutationVariables,
-} from "src/generated/CreateHouseMutation";
+  CreateMemoryMutation,
+  CreateMemoryMutationVariables,
+} from "src/generated/CreateMemoryMutation";
 import {
-  UpdateHouseMutation,
-  UpdateHouseMutationVariables,
-} from "src/generated/UpdateHouseMutation";
+  UpdateMemoryMutation,
+  UpdateMemoryMutationVariables,
+} from "src/generated/UpdateMemoryMutation";
 import { CreateSignatureMutation } from "src/generated/CreateSignatureMutation";
 
 const SIGNATURE_MUTATION = gql`
@@ -24,24 +24,24 @@ const SIGNATURE_MUTATION = gql`
   }
 `;
 
-const CREATE_HOUSE_MUTATION = gql`
-  mutation CreateHouseMutation($input: HouseInput!) {
-    createHouse(input: $input) {
+const CREATE_memory_MUTATION = gql`
+  mutation CreateMemoryMutation($input: MemoryInput!) {
+    createMemory(input: $input) {
       id
     }
   }
 `;
 
-const UPDATE_HOUSE_MUTATION = gql`
-  mutation UpdateHouseMutation($id: String!, $input: HouseInput!) {
-    updateHouse(id: $id, input: $input) {
+const UPDATE_memory_MUTATION = gql`
+  mutation UpdateMemoryMutation($id: String!, $input: MemoryInput!) {
+    updateMemory(id: $id, input: $input) {
       id
       image
       publicId
       latitude
       longitude
-      bedrooms
-      address
+      hearts
+      message
     }
   }
 `;
@@ -71,58 +71,58 @@ async function uploadImage(
 }
 
 interface IFormData {
-  address: string;
+  message: string;
   latitude: number;
   longitude: number;
-  bedrooms: string;
+  hearts: string;
   image: FileList;
 }
 
-interface IHouse {
+interface IMemory {
   id: string;
-  address: string;
+  message: string;
   latitude: number;
   longitude: number;
-  bedrooms: number;
+  hearts: number;
   image: string;
   publicId: string;
 }
 
 interface IProps {
-  house?: IHouse;
+  memory?: IMemory;
 }
 
-export default function HouseForm({ house }: IProps) {
+export default function MemoryForm({ memory }: IProps) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>();
   const { register, handleSubmit, setValue, errors, watch } = useForm<
     IFormData
   >({
-    defaultValues: house
+    defaultValues: memory
       ? {
-          address: house.address,
-          latitude: house.latitude,
-          longitude: house.longitude,
-          bedrooms: house.bedrooms.toString(),
+          message: memory.message,
+          latitude: memory.latitude,
+          longitude: memory.longitude,
+          hearts: memory.hearts.toString(),
         }
       : {},
   });
-  const address = watch("address");
+  const message = watch("message");
   const [createSignature] = useMutation<CreateSignatureMutation>(
     SIGNATURE_MUTATION
   );
-  const [createHouse] = useMutation<
-    CreateHouseMutation,
-    CreateHouseMutationVariables
-  >(CREATE_HOUSE_MUTATION);
-  const [updateHouse] = useMutation<
-    UpdateHouseMutation,
-    UpdateHouseMutationVariables
-  >(UPDATE_HOUSE_MUTATION);
+  const [createMemory] = useMutation<
+    CreateMemoryMutation,
+    CreateMemoryMutationVariables
+  >(CREATE_memory_MUTATION);
+  const [updateMemory] = useMutation<
+    UpdateMemoryMutation,
+    UpdateMemoryMutationVariables
+  >(UPDATE_memory_MUTATION);
 
   useEffect(() => {
-    register({ name: "address" }, { required: "Please enter your address" });
+    register({ name: "message" }, { required: "Please enter your address" });
     register({ name: "latitude" }, { required: true, min: -90, max: 90 });
     register({ name: "longitude" }, { required: true, min: -180, max: 180 });
   }, [register]);
@@ -133,28 +133,28 @@ export default function HouseForm({ house }: IProps) {
       const { signature, timestamp } = signatureData.createImageSignature;
       const imageData = await uploadImage(data.image[0], signature, timestamp);
 
-      const { data: houseData } = await createHouse({
+      const { data: memoryData } = await createMemory({
         variables: {
           input: {
-            address: data.address,
+            message: data.message,
             image: imageData.secure_url,
             coordinates: {
               latitude: data.latitude,
               longitude: data.longitude,
             },
-            bedrooms: parseInt(data.bedrooms, 10),
+            hearts: parseInt(data.hearts, 10),
           },
         },
       });
 
-      if (houseData?.createHouse) {
-        router.push(`/houses/${houseData.createHouse.id}`);
+      if (memoryData?.createMemory) {
+        router.push(`/memories/${memoryData.createMemory.id}`);
       }
     }
   };
 
-  const handleUpdate = async (currentHouse: IHouse, data: IFormData) => {
-    let image = currentHouse.image;
+  const handleUpdate = async (currentMemory: IMemory, data: IFormData) => {
+    let image = currentMemory.image;
 
     if (data.image[0]) {
       const { data: signatureData } = await createSignature();
@@ -169,30 +169,30 @@ export default function HouseForm({ house }: IProps) {
       }
     }
 
-    const { data: houseData } = await updateHouse({
+    const { data: memoryData } = await updateMemory({
       variables: {
-        id: currentHouse.id,
+        id: currentMemory.id,
         input: {
-          address: data.address,
+          message: data.message,
           image: image,
           coordinates: {
             latitude: data.latitude,
             longitude: data.longitude,
           },
-          bedrooms: parseInt(data.bedrooms, 10),
+          hearts: parseInt(data.hearts, 10),
         },
       },
     });
 
-    if (houseData?.updateHouse) {
-      router.push(`/houses/${currentHouse.id}`);
+    if (memoryData?.updateMemory) {
+      router.push(`/memories/${currentMemory.id}`);
     }
   };
 
   const onSubmit = (data: IFormData) => {
     setSubmitting(false);
-    if (!!house) {
-      handleUpdate(house, data);
+    if (!!memory) {
+      handleUpdate(memory, data);
     } else {
       handleCreate(data);
     }
@@ -201,25 +201,25 @@ export default function HouseForm({ house }: IProps) {
   return (
     <form className="mx-auto max-w-xl py-4" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="text-xl">
-        {house ? `Editing ${house.address}` : "Add a New House"}
+        {memory ? `Editing ${memory.message}` : "Add a New Memory"}
       </h1>
 
       <div className="mt-4">
         <label htmlFor="search" className="block">
-          Search for your address
+          Search for your location
         </label>
         <SearchBox
-          onSelectAddress={(address, latitude, longitude) => {
-            setValue("address", address);
+          onSelectMessage={(message, latitude, longitude) => {
+            setValue("message", message);
             setValue("latitude", latitude);
             setValue("longitude", longitude);
           }}
-          defaultValue={house ? house.address : ""}
+          defaultValue={memory ? memory.message : ""}
         />
-        {errors.address && <p>{errors.address.message}</p>}
+        {errors.message && <p>{errors.message.message}</p>}
       </div>
 
-      {address && (
+      {message && (
         <>
           <div className="mt-4">
             <label
@@ -236,7 +236,7 @@ export default function HouseForm({ house }: IProps) {
               style={{ display: "none" }}
               ref={register({
                 validate: (fileList: FileList) => {
-                  if (house || fileList.length === 1) return true;
+                  if (memory || fileList.length === 1) return true;
                   return "Please upload one file";
                 },
               })}
@@ -257,12 +257,12 @@ export default function HouseForm({ house }: IProps) {
                 className="mt-4 object-cover"
                 style={{ width: "576px", height: `${(9 / 16) * 576}px` }}
               />
-            ) : house ? (
+            ) : memory ? (
               <Image
                 className="mt-4"
                 cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
-                publicId={house.publicId}
-                alt={house.address}
+                publicId={memory.publicId}
+                alt={memory.message}
                 secure
                 dpr="auto"
                 quality="auto"
@@ -276,21 +276,21 @@ export default function HouseForm({ house }: IProps) {
           </div>
 
           <div className="mt-4">
-            <label htmlFor="bedrooms" className="block">
+            <label htmlFor="hearts" className="block">
               Beds
             </label>
             <input
-              id="bedrooms"
-              name="bedrooms"
+              id="hearts"
+              name="hearts"
               type="number"
               className="p-2"
               ref={register({
-                required: "Please enter the number of bedrooms",
-                max: { value: 10, message: "Wooahh, too big of a house" },
-                min: { value: 1, message: "Must have at least 1 bedroom" },
+                required: "Please enter the number of hearts",
+                max: { value: 10, message: "Wooahh, too lovely of a memory" },
+                min: { value: 1, message: "Must have at least 1 heart" },
               })}
             />
-            {errors.bedrooms && <p>{errors.bedrooms.message}</p>}
+            {errors.hearts && <p>{errors.hearts.message}</p>}
           </div>
 
           <div className="mt-4">
@@ -301,7 +301,7 @@ export default function HouseForm({ house }: IProps) {
             >
               Save
             </button>{" "}
-            <Link href={house ? `/houses/${house.id}` : "/"}>
+            <Link href={memory ? `/memories/${memory.id}` : "/"}>
               <a>Cancel</a>
             </Link>
           </div>

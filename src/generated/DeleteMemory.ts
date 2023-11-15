@@ -4,13 +4,13 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: DeleteHouse
+// GraphQL mutation operation: DeleteMemory
 // ====================================================
 
-export interface DeleteHouse {
-  deleteHouse: boolean;
+export interface DeleteMemory {
+  deleteMemory: boolean;
 }
 
-export interface DeleteHouseVariables {
+export interface DeleteMemoryVariables {
   id: string;
 }

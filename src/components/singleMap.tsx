@@ -3,21 +3,21 @@ import Link from "next/link";
 import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-interface IHouse {
+interface IMemory {
   id: string;
   latitude: number;
   longitude: number;
 }
 
 interface IProps {
-  house: IHouse;
-  nearby: IHouse[];
+  memory: IMemory;
+  nearby: IMemory[];
 }
 
-export default function SingleMap({ house, nearby }: IProps) {
+export default function SingleMap({ memory, nearby }: IProps) {
   const [viewport, setViewport] = useState({
-    latitude: house.latitude,
-    longitude: house.longitude,
+    latitude: memory.latitude,
+    longitude: memory.longitude,
     zoom: 13,
   });
 
@@ -38,8 +38,8 @@ export default function SingleMap({ house, nearby }: IProps) {
         </div>
 
         <Marker
-          latitude={house.latitude}
-          longitude={house.longitude}
+          latitude={memory.latitude}
+          longitude={memory.longitude}
           offsetLeft={-15}
           offsetTop={-15}
         >
@@ -47,7 +47,7 @@ export default function SingleMap({ house, nearby }: IProps) {
             type="button"
             style={{ width: "30px", height: "30px", fontSize: "30px" }}
           >
-            <img src="/home-color.svg" className="w-8" alt="selected house" />
+            <img src="/heart-color.svg" className="w-8" alt="selected memory" />
           </button>
         </Marker>
 
@@ -59,9 +59,9 @@ export default function SingleMap({ house, nearby }: IProps) {
             offsetLeft={-15}
             offsetTop={-15}
           >
-            <Link href={`/houses/${near.id}`}>
+            <Link href={`/memories/${near.id}`}>
               <a style={{ width: "30px", height: "30px", fontSize: "30px" }}>
-                <img src="/home-solid.svg" className="w-8" alt="nearby house" />
+                <img src="/heart-solid.svg" className="w-8" alt="nearby memory" />
               </a>
             </Link>
           </Marker>

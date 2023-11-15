@@ -2,28 +2,28 @@ import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useAuth } from "src/auth/useAuth";
-import { DeleteHouse, DeleteHouseVariables } from "src/generated/DeleteHouse";
+import { DeleteMemory, DeleteMemoryVariables } from "src/generated/DeleteMemory";
 
 const DELETE_MUTATION = gql`
-  mutation DeleteHouse($id: String!) {
-    deleteHouse(id: $id)
+  mutation DeleteMemory($id: String!) {
+    deleteMemory(id: $id)
   }
 `;
 
 interface IProps {
-  house: {
+  memory: {
     id: string;
     userId: string;
   };
 }
 
-export default function HouseNav({ house }: IProps) {
+export default function MemoryNav({ memory }: IProps) {
   const router = useRouter();
   const { user } = useAuth();
-  const canManage = !!user && user.uid === house.userId;
-  const [deleteHouse, { loading }] = useMutation<
-    DeleteHouse,
-    DeleteHouseVariables
+  const canManage = !!user && user.uid === memory.userId;
+  const [deleteMemory, { loading }] = useMutation<
+    DeleteMemory,
+    DeleteMemoryVariables
   >(DELETE_MUTATION);
 
   return (
@@ -34,7 +34,7 @@ export default function HouseNav({ house }: IProps) {
       {canManage && (
         <>
           {" | "}
-          <Link href={`/houses/${house.id}/edit`}>
+          <Link href={`/memories/${memory.id}/edit`}>
             <a>edit</a>
           </Link>
           {" | "}
@@ -43,7 +43,7 @@ export default function HouseNav({ house }: IProps) {
             type="button"
             onClick={async () => {
               if (confirm("Are you sure?")) {
-                await deleteHouse({ variables: { id: house.id } });
+                await deleteMemory({ variables: { id: memory.id } });
                 router.push("/");
               }
             }}

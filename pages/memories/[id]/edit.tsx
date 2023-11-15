@@ -3,52 +3,52 @@ import { useRouter } from "next/router";
 import { useQuery, gql } from "@apollo/client";
 import { loadIdToken } from "src/auth/firebaseAdmin";
 import Layout from "src/components/layout";
-import HouseForm from "src/components/houseForm";
+import MemoryForm from "src/components/memoryForm";
 import { useAuth } from "src/auth/useAuth";
 import {
-  EditHouseQuery,
-  EditHouseQueryVariables,
-} from "src/generated/EditHouseQuery";
+  EditMemoryQuery,
+  EditMemoryQueryVariables,
+} from "src/generated/EditMemoryQuery";
 
-const EDIT_HOUSE_QUERY = gql`
-  query EditHouseQuery($id: String!) {
-    house(id: $id) {
+const EDIT_memory_QUERY = gql`
+  query EditMemoryQuery($id: String!) {
+    memory(id: $id) {
       id
       userId
-      address
+      message
       image
       publicId
-      bedrooms
+      hearts
       latitude
       longitude
     }
   }
 `;
 
-export default function EditHouse() {
+export default function EditMemory() {
   const {
     query: { id },
   } = useRouter();
 
   if (!id) return null;
-  return <HouseData id={id as string} />;
+  return <MemoryData id={id as string} />;
 }
 
-function HouseData({ id }: { id: string }) {
+function MemoryData({ id }: { id: string }) {
   const { user } = useAuth();
-  const { data, loading } = useQuery<EditHouseQuery, EditHouseQueryVariables>(
-    EDIT_HOUSE_QUERY,
+  const { data, loading } = useQuery<EditMemoryQuery, EditMemoryQueryVariables>(
+    EDIT_memory_QUERY,
     { variables: { id } }
   );
 
   if (!user) return <Layout main={<div>Please login</div>} />;
   if (loading) return <Layout main={<div>loading...</div>} />;
-  if (data && !data.house)
-    return <Layout main={<div>Unable to load house</div>} />;
-  if (user.uid !== data?.house?.userId)
+  if (data && !data.memory)
+    return <Layout main={<div>Unable to load memory</div>} />;
+  if (user.uid !== data?.memory?.userId)
     return <Layout main={<div>You don't have permission</div>} />;
 
-  return <Layout main={<HouseForm house={data.house} />} />;
+  return <Layout main={<MemoryForm memory={data.memory} />} />;
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {

@@ -39,9 +39,9 @@ class BoundsInput {
 }
 
 @InputType()
-class HouseInput {
+class MemoryInput {
   @Field((_type) => String)
-  address!: string;
+  message!: string;
 
   @Field((_type) => String)
   image!: string;
@@ -50,11 +50,11 @@ class HouseInput {
   coordinates!: CoordinatesInput;
 
   @Field((_type) => Int)
-  bedrooms!: number;
+  hearts!: number;
 }
 
 @ObjectType()
-class House {
+class Memory {
   @Field((_type) => ID)
   id!: number;
 
@@ -68,7 +68,7 @@ class House {
   longitude!: number;
 
   @Field((_type) => String)
-  address!: string;
+  message!: string;
 
   @Field((_type) => String)
   image!: string;
@@ -80,16 +80,16 @@ class House {
   }
 
   @Field((_type) => Int)
-  bedrooms!: number;
+  hearts!: number;
 
-  @Field((_type) => [House])
+  @Field((_type) => [Memory])
   async nearby(@Ctx() ctx: Context) {
     const bounds = getBoundsOfDistance(
       { latitude: this.latitude, longitude: this.longitude },
       10000
     );
 
-    return ctx.prisma.house.findMany({
+    return ctx.prisma.memory.findMany({
       where: {
         latitude: { gte: bounds[0].latitude, lte: bounds[1].latitude },
         longitude: { gte: bounds[0].longitude, lte: bounds[1].longitude },
@@ -101,15 +101,15 @@ class House {
 }
 
 @Resolver()
-export class HouseResolver {
-  @Query((_returns) => House, { nullable: true })
-  async house(@Arg("id") id: string, @Ctx() ctx: Context) {
-    return ctx.prisma.house.findOne({ where: { id: parseInt(id, 10) } });
+export class MemoryResolver {
+  @Query((_returns) => Memory, { nullable: true })
+  async memory(@Arg("id") id: string, @Ctx() ctx: Context) {
+    return ctx.prisma.memory.findOne({ where: { id: parseInt(id, 10) } });
   }
 
-  @Query((_returns) => [House], { nullable: false })
-  async houses(@Arg("bounds") bounds: BoundsInput, @Ctx() ctx: Context) {
-    return ctx.prisma.house.findMany({
+  @Query((_returns) => [Memory], { nullable: false })
+  async memories(@Arg("bounds") bounds: BoundsInput, @Ctx() ctx: Context) {
+    return ctx.prisma.memory.findMany({
       where: {
         latitude: { gte: bounds.sw.latitude, lte: bounds.ne.latitude },
         longitude: { gte: bounds.sw.longitude, lte: bounds.ne.longitude },
@@ -119,60 +119,60 @@ export class HouseResolver {
   }
 
   @Authorized()
-  @Mutation((_returns) => House, { nullable: true })
-  async createHouse(
-    @Arg("input") input: HouseInput,
+  @Mutation((_returns) => Memory, { nullable: true })
+  async createMemory(
+    @Arg("input") input: MemoryInput,
     @Ctx() ctx: AuthorizedContext
   ) {
-    return await ctx.prisma.house.create({
+    return await ctx.prisma.memory.create({
       data: {
         userId: ctx.uid,
         image: input.image,
-        address: input.address,
+        message: input.message,
         latitude: input.coordinates.latitude,
         longitude: input.coordinates.longitude,
-        bedrooms: input.bedrooms,
+        hearts: input.hearts,
       },
     });
   }
 
   @Authorized()
-  @Mutation((_returns) => House, { nullable: true })
-  async updateHouse(
+  @Mutation((_returns) => Memory, { nullable: true })
+  async updateMemory(
     @Arg("id") id: string,
-    @Arg("input") input: HouseInput,
+    @Arg("input") input: MemoryInput,
     @Ctx() ctx: AuthorizedContext
   ) {
-    const houseId = parseInt(id, 10);
-    const house = await ctx.prisma.house.findOne({ where: { id: houseId } });
+    const memoryId = parseInt(id, 10);
+    const memory = await ctx.prisma.memory.findOne({ where: { id: memoryId } });
 
-    if (!house || house.userId !== ctx.uid) return null;
+    if (!memory || memory.userId !== ctx.uid) return null;
 
-    return await ctx.prisma.house.update({
-      where: { id: houseId },
+    return await ctx.prisma.memory.update({
+      where: { id: memoryId },
       data: {
         image: input.image,
-        address: input.address,
+        message: input.message,
         latitude: input.coordinates.latitude,
         longitude: input.coordinates.longitude,
-        bedrooms: input.bedrooms,
+        hearts: input.hearts,
       },
     });
   }
 
   @Authorized()
   @Mutation((_returns) => Boolean, { nullable: false })
-  async deleteHouse(
+  async deleteMemory(
     @Arg("id") id: string,
     @Ctx() ctx: AuthorizedContext
   ): Promise<boolean> {
-    const houseId = parseInt(id, 10);
-    const house = await ctx.prisma.house.findOne({ where: { id: houseId } });
+    const memoryId = parseInt(id, 10);
+    const memory = await ctx.prisma.memory.findOne({ where: { id: memoryId } });
 
-    if (!house || house.userId !== ctx.uid) return false;
+    if (!memory || memory.userId !== ctx.uid) return false;
 
-    await ctx.prisma.house.delete({
-      where: { id: houseId },
+    await ctx.prisma.memory.delete({
+      where: { id: memoryId },
     });
     return true;
   }

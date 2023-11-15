@@ -3,20 +3,20 @@ import { useQuery, gql } from "@apollo/client";
 import { useDebounce } from "use-debounce";
 import Layout from "src/components/layout";
 import Map from "src/components/map";
-import HouseList from "src/components/houseList";
+import MemoryList from "src/components/memoryList";
 import { useLastData } from "src/utils/useLastData";
 import { useLocalState } from "src/utils/useLocalState";
-import { HousesQuery, HousesQueryVariables } from "src/generated/HousesQuery";
+import { MemorysQuery, MemorysQueryVariables } from "src/generated/MemorysQuery";
 
-const HOUSES_QUERY = gql`
-  query HousesQuery($bounds: BoundsInput!) {
-    houses(bounds: $bounds) {
+const memories_QUERY = gql`
+  query MemorysQuery($bounds: BoundsInput!) {
+    memories(bounds: $bounds) {
       id
       latitude
       longitude
-      address
+      message
       publicId
-      bedrooms
+      hearts
     }
   }
 `;
@@ -44,15 +44,15 @@ export default function Home() {
     "[[0,0],[0,0]]"
   );
   const [debouncedDataBounds] = useDebounce(dataBounds, 200);
-  const { data, error } = useQuery<HousesQuery, HousesQueryVariables>(
-    HOUSES_QUERY,
+  const { data, error } = useQuery<MemorysQuery, MemorysQueryVariables>(
+    memories_QUERY,
     {
       variables: { bounds: parseBounds(debouncedDataBounds) },
     }
   );
   const lastData = useLastData(data);
 
-  if (error) return <Layout main={<div>Error loading houses</div>} />;
+  if (error) return <Layout main={<div>Error loading memories</div>} />;
 
   return (
     <Layout
@@ -62,15 +62,15 @@ export default function Home() {
             className="w-1/2 pb-4"
             style={{ maxHeight: "calc(100vh - 64px)", overflowX: "scroll" }}
           >
-            <HouseList
-              houses={lastData ? lastData.houses : []}
+            <MemoryList
+              memories={lastData ? lastData.memories : []}
               setHighlightedId={setHighlightedId}
             />
           </div>
           <div className="w-1/2">
             <Map
               setDataBounds={setDataBounds}
-              houses={lastData ? lastData.houses : []}
+              memories={lastData ? lastData.memories : []}
               highlightedId={highlightedId}
             />
           </div>

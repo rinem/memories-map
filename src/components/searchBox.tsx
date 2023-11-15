@@ -15,8 +15,8 @@ import {
 import "@reach/combobox/styles.css";
 
 interface ISearchBoxProps {
-  onSelectAddress: (
-    address: string,
+  onSelectMessage: (
+    message: string,
     latitude: number | null,
     longitude: number | null
   ) => void;
@@ -25,7 +25,7 @@ interface ISearchBoxProps {
 
 const libraries: Libraries = ["places"];
 
-export function SearchBox({ onSelectAddress, defaultValue }: ISearchBoxProps) {
+export function SearchBox({ onSelectMessage, defaultValue }: ISearchBoxProps) {
   const { isLoaded, loadError } = useGoogleMapsScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? "",
     libraries,
@@ -36,13 +36,13 @@ export function SearchBox({ onSelectAddress, defaultValue }: ISearchBoxProps) {
 
   return (
     <ReadySearchBox
-      onSelectAddress={onSelectAddress}
+      onSelectMessage={onSelectMessage}
       defaultValue={defaultValue}
     />
   );
 }
 
-function ReadySearchBox({ onSelectAddress, defaultValue }: ISearchBoxProps) {
+function ReadySearchBox({ onSelectMessage, defaultValue }: ISearchBoxProps) {
   const {
     ready,
     value,
@@ -54,18 +54,18 @@ function ReadySearchBox({ onSelectAddress, defaultValue }: ISearchBoxProps) {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
     if (e.target.value === "") {
-      onSelectAddress("", null, null);
+      onSelectMessage("", null, null);
     }
   };
 
-  const handleSelect = async (address: string) => {
-    setValue(address, false);
+  const handleSelect = async (message: string) => {
+    setValue(message, false);
     clearSuggestions();
 
     try {
-      const results = await getGeocode({ address });
+      const results = await getGeocode({ message });
       const { lat, lng } = await getLatLng(results[0]);
-      onSelectAddress(address, lat, lng);
+      onSelectMessage(message, lat, lng);
     } catch (error) {
       console.error(`😱 Error:`, error);
     }

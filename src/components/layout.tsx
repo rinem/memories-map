@@ -16,16 +16,16 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
           <Link href="/">
             <a>
               <img
-                src="/home-color.svg"
-                alt="home house"
+                src="/heart-color.svg"
+                alt="home memory"
                 className="inline w-6"
               />
             </a>
           </Link>
           {authenticated ? (
             <>
-              <Link href="/houses/add">
-                <a>Add House</a>
+              <Link href="/memories/add">
+                <a>Add Memory</a>
               </Link>
               <button onClick={logout}>Logout</button>
             </>

@@ -4,25 +4,25 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: EditHouseQuery
+// GraphQL query operation: EditMemoryQuery
 // ====================================================
 
-export interface EditHouseQuery_house {
-  __typename: "House";
+export interface EditMemoryQuery_memory {
+  __typename: "Memory";
   id: string;
   userId: string;
-  address: string;
+  message: string;
   image: string;
   publicId: string;
-  bedrooms: number;
+  hearts: number;
   latitude: number;
   longitude: number;
 }
 
-export interface EditHouseQuery {
-  house: EditHouseQuery_house | null;
+export interface EditMemoryQuery {
+  memory: EditMemoryQuery_memory | null;
 }
 
-export interface EditHouseQueryVariables {
+export interface EditMemoryQueryVariables {
   id: string;
 }

@@ -17,9 +17,9 @@ export interface CoordinatesInput {
   longitude: number;
 }
 
-export interface HouseInput {
-  address: string;
-  bedrooms: number;
+export interface MemoryInput {
+  message: string;
+  hearts: number;
   coordinates: CoordinatesInput;
   image: string;
 }

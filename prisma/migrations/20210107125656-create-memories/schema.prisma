@@ -10,17 +10,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model House {
+model Memory {
   id        Int      @id @default(autoincrement())
   userId    String   @map(name: "user_id")
   image     String
   latitude  Float
   longitude Float
-  address   String
-  bedrooms  Int
+  message   String
+  hearts  Int
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
 
-  @@index([userId], name: "houses.userId")
-  @@map(name: "houses")
+  @@index([userId], name: "memories.userId")
+  @@map(name: "memories")
 }

@@ -6,23 +6,23 @@
 import { BoundsInput } from "./globalTypes";
 
 // ====================================================
-// GraphQL query operation: HousesQuery
+// GraphQL query operation: MemorysQuery
 // ====================================================
 
-export interface HousesQuery_houses {
-  __typename: "House";
+export interface MemorysQuery_memories {
+  __typename: "Memory";
   id: string;
   latitude: number;
   longitude: number;
-  address: string;
+  message: string;
   publicId: string;
-  bedrooms: number;
+  hearts: number;
 }
 
-export interface HousesQuery {
-  houses: HousesQuery_houses[];
+export interface MemorysQuery {
+  memories: MemorysQuery_memories[];
 }
 
-export interface HousesQueryVariables {
+export interface MemorysQueryVariables {
   bounds: BoundsInput;
 }

@@ -2,21 +2,21 @@ import { useRouter } from "next/router";
 import { Image } from "cloudinary-react";
 import { useQuery, gql } from "@apollo/client";
 import Layout from "src/components/layout";
-import HouseNav from "src/components/houseNav";
+import MemoryNav from "src/components/memoryNav";
 import SingleMap from "src/components/singleMap";
 import {
-  ShowHouseQuery,
-  ShowHouseQueryVariables,
-} from "src/generated/ShowHouseQuery";
+  ShowMemoryQuery,
+  ShowMemoryQueryVariables,
+} from "src/generated/ShowMemoryQuery";
 
-const SHOW_HOUSE_QUERY = gql`
-  query ShowHouseQuery($id: String!) {
-    house(id: $id) {
+const SHOW_memory_QUERY = gql`
+  query ShowMemoryQuery($id: String!) {
+    memory(id: $id) {
       id
       userId
-      address
+      message
       publicId
-      bedrooms
+      hearts
       latitude
       longitude
       nearby {
@@ -28,41 +28,41 @@ const SHOW_HOUSE_QUERY = gql`
   }
 `;
 
-export default function ShowHouse() {
+export default function ShowMemory() {
   const {
     query: { id },
   } = useRouter();
 
   if (!id) return null;
-  return <HouseData id={id as string} />;
+  return <MemoryData id={id as string} />;
 }
 
-function HouseData({ id }: { id: string }) {
-  const { data, loading } = useQuery<ShowHouseQuery, ShowHouseQueryVariables>(
-    SHOW_HOUSE_QUERY,
+function MemoryData({ id }: { id: string }) {
+  const { data, loading } = useQuery<ShowMemoryQuery, ShowMemoryQueryVariables>(
+    SHOW_memory_QUERY,
     { variables: { id } }
   );
 
   if (loading || !data) return <Layout main={<div>Loading...</div>} />;
-  if (!data.house)
-    return <Layout main={<div>Unable to load house {id}</div>} />;
+  if (!data.memory)
+    return <Layout main={<div>Unable to load memory {id}</div>} />;
 
-  const { house } = data;
+  const { memory } = data;
 
   return (
     <Layout
       main={
         <div className="sm:block md:flex">
           <div className="sm:w-full md:w-1/2 p-4">
-            <HouseNav house={house} />
+            <MemoryNav memory={memory} />
 
-            <h1 className="text-3xl my-2">{house.address}</h1>
+            <h1 className="text-3xl my-2">{memory.message}</h1>
 
             <Image
               className="pb-2"
               cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
-              publicId={house.publicId}
-              alt={house.address}
+              publicId={memory.publicId}
+              alt={memory.message}
               secure
               dpr="auto"
               quality="auto"
@@ -72,10 +72,10 @@ function HouseData({ id }: { id: string }) {
               gravity="auto"
             />
 
-            <p>{house.bedrooms} 🛌 house</p>
+            <p>{memory.hearts} 🛌 memory</p>
           </div>
           <div className="sm:w-full md:w-1/2">
-            <SingleMap house={house} nearby={house.nearby} />
+            <SingleMap memory={memory} nearby={memory.nearby} />
           </div>
         </div>
       }
