@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Image } from "cloudinary-react";
-import { MemorysQuery_memories } from "src/generated/MemorysQuery";
+import { MemoriesQuery_memories } from "src/generated/MemoriesQuery";
 
 interface IProps {
-  memories: MemorysQuery_memories[];
+  memories: MemoriesQuery_memories[];
   setHighlightedId: (id: string | null) => void;
 }
 

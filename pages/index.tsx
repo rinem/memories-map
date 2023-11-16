@@ -6,10 +6,10 @@ import Map from "src/components/map";
 import MemoryList from "src/components/memoryList";
 import { useLastData } from "src/utils/useLastData";
 import { useLocalState } from "src/utils/useLocalState";
-import { MemorysQuery, MemorysQueryVariables } from "src/generated/MemorysQuery";
+import { MemoriesQuery, MemoriesQueryVariables } from "src/generated/MemoriesQuery";
 
 const memories_QUERY = gql`
-  query MemorysQuery($bounds: BoundsInput!) {
+  query MemoriesQuery($bounds: BoundsInput!) {
     memories(bounds: $bounds) {
       id
       latitude
@@ -44,7 +44,7 @@ export default function Memory() {
     "[[0,0],[0,0]]"
   );
   const [debouncedDataBounds] = useDebounce(dataBounds, 200);
-  const { data, error } = useQuery<MemorysQuery, MemorysQueryVariables>(
+  const { data, error } = useQuery<MemoriesQuery, MemoriesQueryVariables>(
     memories_QUERY,
     {
       variables: { bounds: parseBounds(debouncedDataBounds) },

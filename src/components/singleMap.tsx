@@ -27,7 +27,7 @@ export default function SingleMap({ memory, nearby }: IProps) {
         {...viewport}
         width="100%"
         height="calc(100vh - 64px)"
-        onViewportChange={(nextViewport) => setViewport(nextViewport)}
+        onViewportChange={(nextViewport: any) => setViewport(nextViewport)}
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_TOKEN}
         mapStyle="mapbox://styles/leighhalliday/ckhjaksxg0x2v19s1ovps41ef"
         scrollZoom={false}

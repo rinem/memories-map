@@ -6,7 +6,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 // import mapboxgl from 'mapbox-gl';
 
 import { useLocalState } from "src/utils/useLocalState";
-import { MemorysQuery_memories } from "src/generated/MemorysQuery";
+import { MemoriesQuery_memories } from "src/generated/MemoriesQuery";
 // import { SearchBox } from "./searchBox";
 
 // The following is required to stop "npm build" from transpiling mapbox code.
@@ -16,13 +16,13 @@ import { MemorysQuery_memories } from "src/generated/MemorysQuery";
 // mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 interface IProps {
   setDataBounds: (bounds: string) => void;
-  memories: MemorysQuery_memories[];
+  memories: MemoriesQuery_memories[];
   highlightedId: string | null;
 }
 
 export default function Map({ setDataBounds, memories, highlightedId }: IProps) {
-  const [selected, setSelected] = useState<MemorysQuery_memories | null>(null);
-  const mapRef = useRef<ReactMapGL | null>(null);
+  const [selected, setSelected] = useState<MemoriesQuery_memories | null>(null);
+  const mapRef = useRef<any>(null);
   const [viewport, setViewport] = useState({
     latitude: 28.63,
     longitude: 77.21,
@@ -36,7 +36,7 @@ export default function Map({ setDataBounds, memories, highlightedId }: IProps) 
         width="100%"
         height="calc(100vh - 64px)"
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_TOKEN}
-        onViewportChange={(nextViewport) => setViewport({ ...nextViewport })}
+        onViewportChange={(nextViewport: any) => setViewport({ ...nextViewport })}
         ref={(instance) => (mapRef.current = instance)}
         minZoom={5}
         maxZoom={15}
@@ -47,7 +47,7 @@ export default function Map({ setDataBounds, memories, highlightedId }: IProps) 
             setDataBounds(JSON.stringify(bounds.toArray()));
           }
         }}
-        onInteractionStateChange={async (extra) => {
+        onInteractionStateChange={async (extra: any) => {
           if (!extra.isDragging && mapRef.current) {
             const bounds = await mapRef.current.getMap().getBounds();
             setDataBounds(JSON.stringify(bounds.toArray()));

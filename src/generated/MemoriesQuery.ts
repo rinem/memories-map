@@ -6,10 +6,10 @@
 import { BoundsInput } from "./globalTypes";
 
 // ====================================================
-// GraphQL query operation: MemorysQuery
+// GraphQL query operation: MemoriesQuery
 // ====================================================
 
-export interface MemorysQuery_memories {
+export interface MemoriesQuery_memories {
   __typename: "Memory";
   id: string;
   latitude: number;
@@ -19,10 +19,10 @@ export interface MemorysQuery_memories {
   hearts: number;
 }
 
-export interface MemorysQuery {
-  memories: MemorysQuery_memories[];
+export interface MemoriesQuery {
+  memories: MemoriesQuery_memories[];
 }
 
-export interface MemorysQueryVariables {
+export interface MemoriesQueryVariables {
   bounds: BoundsInput;
 }

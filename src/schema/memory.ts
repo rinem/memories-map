@@ -14,7 +14,7 @@ import {
 } from "type-graphql";
 import { Min, Max } from "class-validator";
 import { getBoundsOfDistance } from "geolib";
-import { Context, AuthorizedContext } from "./context";
+import type { Context, AuthorizedContext } from "./context";
 
 @InputType()
 class CoordinatesInput {
@@ -83,7 +83,7 @@ class Memory {
   hearts!: number;
 
   @Field((_type) => [Memory])
-  async nearby(@Ctx() ctx: Context) {
+  async nearby(@Ctx() ctx: any) {
     const bounds = getBoundsOfDistance(
       { latitude: this.latitude, longitude: this.longitude },
       10000
@@ -103,12 +103,12 @@ class Memory {
 @Resolver()
 export class MemoryResolver {
   @Query((_returns) => Memory, { nullable: true })
-  async memory(@Arg("id") id: string, @Ctx() ctx: Context) {
+  async memory(@Arg("id") id: string, @Ctx() ctx: any) {
     return ctx.prisma.memory.findUnique({ where: { id: parseInt(id, 10) } });
   }
 
   @Query((_returns) => [Memory], { nullable: false })
-  async memories(@Arg("bounds") bounds: BoundsInput, @Ctx() ctx: Context) {
+  async memories(@Arg("bounds") bounds: BoundsInput, @Ctx() ctx: any) {
     return ctx.prisma.memory.findMany({
       where: {
         latitude: { gte: bounds.sw.latitude, lte: bounds.ne.latitude },
@@ -144,7 +144,7 @@ export class MemoryResolver {
     @Ctx() ctx: AuthorizedContext
   ) {
     const memoryId = parseInt(id, 10);
-    const memory = await ctx.prisma.memory.findOne({ where: { id: memoryId } });
+    const memory = await ctx.prisma.memory.findUnique({ where: { id: memoryId } });
 
     if (!memory || memory.userId !== ctx.uid) return null;
 
@@ -167,7 +167,7 @@ export class MemoryResolver {
     @Ctx() ctx: AuthorizedContext
   ): Promise<boolean> {
     const memoryId = parseInt(id, 10);
-    const memory = await ctx.prisma.memory.findOne({ where: { id: memoryId } });
+    const memory = await ctx.prisma.memory.findUnique({ where: { id: memoryId } });
 
     if (!memory || memory.userId !== ctx.uid) return false;
 
