@@ -29,13 +29,13 @@ export default function MemoryNav({ memory }: IProps) {
   return (
     <>
       <Link href="/">
-        <a>map</a>
+        <a>{ "← Go back" }</a>
       </Link>
       {canManage && (
         <>
           {" | "}
           <Link href={`/memories/${memory.id}/edit`}>
-            <a>edit</a>
+            <a>Edit</a>
           </Link>
           {" | "}
           <button
@@ -48,7 +48,7 @@ export default function MemoryNav({ memory }: IProps) {
               }
             }}
           >
-            delete
+            Delete
           </button>
         </>
       )}

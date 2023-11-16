@@ -277,7 +277,7 @@ export default function MemoryForm({ memory }: IProps) {
 
           <div className="mt-4">
             <label htmlFor="hearts" className="block">
-              Beds
+              Hearts
             </label>
             <input
               id="hearts"

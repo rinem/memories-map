@@ -1,5 +1,5 @@
 {
-  "name": "house",
+  "name": "memories-map",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -44,7 +44,8 @@
     "type-graphql": "^1.1.1",
     "use-debounce": "^5.0.4",
     "use-google-maps-script": "^0.1.0",
-    "use-places-autocomplete": "^1.6.0"
+    "use-places-autocomplete": "^1.6.0",
+    "worker-loader": "^3.0.8"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.12.1",

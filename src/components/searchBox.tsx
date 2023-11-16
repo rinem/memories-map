@@ -16,7 +16,7 @@ import "@reach/combobox/styles.css";
 
 interface ISearchBoxProps {
   onSelectMessage: (
-    message: string,
+    address: string,
     latitude: number | null,
     longitude: number | null
   ) => void;
@@ -58,14 +58,14 @@ function ReadySearchBox({ onSelectMessage, defaultValue }: ISearchBoxProps) {
     }
   };
 
-  const handleSelect = async (message: string) => {
-    setValue(message, false);
+  const handleSelect = async (address: string) => {
+    setValue(address, false);
     clearSuggestions();
 
     try {
-      const results = await getGeocode({ message });
+      const results = await getGeocode({ address });
       const { lat, lng } = await getLatLng(results[0]);
-      onSelectMessage(message, lat, lng);
+      onSelectMessage(address, lat, lng);
     } catch (error) {
       console.error(`😱 Error:`, error);
     }

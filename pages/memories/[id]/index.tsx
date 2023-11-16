@@ -53,10 +53,10 @@ function MemoryData({ id }: { id: string }) {
     <Layout
       main={
         <div className="sm:block md:flex">
-          <div className="sm:w-full md:w-1/2 p-4">
+          <div className="sm:w-full md:w-1/2 p-4 mt-5">
             <MemoryNav memory={memory} />
 
-            <h1 className="text-3xl my-2">{memory.message}</h1>
+            <h4 className="text-lg my-2 mr-3">{memory.message}</h4>
 
             <Image
               className="pb-2"
@@ -72,7 +72,7 @@ function MemoryData({ id }: { id: string }) {
               gravity="auto"
             />
 
-            <p>{memory.hearts} 🛌 memory</p>
+            {/* <p>{memory.hearts} ❤️</p> */}
           </div>
           <div className="sm:w-full md:w-1/2">
             <SingleMap memory={memory} nearby={memory.nearby} />

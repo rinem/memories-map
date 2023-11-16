@@ -104,7 +104,7 @@ class Memory {
 export class MemoryResolver {
   @Query((_returns) => Memory, { nullable: true })
   async memory(@Arg("id") id: string, @Ctx() ctx: Context) {
-    return ctx.prisma.memory.findOne({ where: { id: parseInt(id, 10) } });
+    return ctx.prisma.memory.findFirst({ where: { id: parseInt(id, 10) } });
   }
 
   @Query((_returns) => [Memory], { nullable: false })

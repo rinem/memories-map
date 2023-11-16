@@ -17,7 +17,7 @@ export default function MemoryList({ memories, setHighlightedId }: IProps) {
             onMouseEnter={() => setHighlightedId(memory.id)}
             onMouseLeave={() => setHighlightedId(null)}
           >
-            <div className="sm:w-full md:w-1/2">
+            <div className="sm:w-full md:w-full">
               <Image
                 cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
                 publicId={memory.publicId}
@@ -25,15 +25,15 @@ export default function MemoryList({ memories, setHighlightedId }: IProps) {
                 secure
                 dpr="auto"
                 quality="auto"
-                width={350}
-                height={Math.floor((9 / 16) * 350)}
+                width={700}
+                height={Math.floor((9 / 16) * 700)}
                 crop="fill"
                 gravity="auto"
               />
             </div>
-            <div className="sm:w-full md:w-1/2 sm:pl-0 md:pl-4">
-              <h2 className="text-lg">{memory.message}</h2>
-              <p>{memory.hearts} 🛌 memory</p>
+            <div className="sm:w-full md:w-full sm:pl-0">
+              <h5 className="text-md py-3">{memory.message}</h5>
+              {/* <p>{memory.hearts} ❤️</p> */}
             </div>
           </div>
         </Link>

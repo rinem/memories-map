@@ -3,10 +3,17 @@ import Link from "next/link";
 import { Image } from "cloudinary-react";
 import ReactMapGL, { Marker, Popup, ViewState } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+// import mapboxgl from 'mapbox-gl';
+
 import { useLocalState } from "src/utils/useLocalState";
 import { MemorysQuery_memories } from "src/generated/MemorysQuery";
-import { SearchBox } from "./searchBox";
+// import { SearchBox } from "./searchBox";
 
+// The following is required to stop "npm build" from transpiling mapbox code.
+// notice the exclamation point in the import.
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax, import/no-unresolved
+// mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 interface IProps {
   setDataBounds: (bounds: string) => void;
   memories: MemorysQuery_memories[];
@@ -17,8 +24,8 @@ export default function Map({ setDataBounds, memories, highlightedId }: IProps) 
   const [selected, setSelected] = useState<MemorysQuery_memories | null>(null);
   const mapRef = useRef<ReactMapGL | null>(null);
   const [viewport, setViewport] = useLocalState<ViewState>("viewport", {
-    latitude: -28,
-    longitude: 77,
+    latitude: 28.63,
+    longitude: 77.21,
     zoom: 10,
   });
 
@@ -34,23 +41,23 @@ export default function Map({ setDataBounds, memories, highlightedId }: IProps) 
         minZoom={5}
         maxZoom={15}
         mapStyle="mapbox://styles/leighhalliday/ckhjaksxg0x2v19s1ovps41ef"
-        onLoad={() => {
+        onLoad={async () => {
           if (mapRef.current) {
-            const bounds = mapRef.current.getMap().getBounds();
+            const bounds = await mapRef.current.getMap().getBounds();
             setDataBounds(JSON.stringify(bounds.toArray()));
           }
         }}
-        onInteractionStateChange={(extra) => {
+        onInteractionStateChange={async (extra) => {
           if (!extra.isDragging && mapRef.current) {
-            const bounds = mapRef.current.getMap().getBounds();
+            const bounds = await mapRef.current.getMap().getBounds();
             setDataBounds(JSON.stringify(bounds.toArray()));
           }
         }}
       >
-        <div className="absolute top-0 w-full z-10 p-4">
-          <SearchBox
+        {/* <div className="absolute top-0 w-full z-10 p-4"> */}
+          {/* <SearchBox
             defaultValue=""
-            onSelectMessage={(_message, latitude, longitude) => {
+            onSelectMessage={async (_address, latitude, longitude) => {
               if (latitude && longitude) {
                 setViewport((old) => ({
                   ...old,
@@ -59,13 +66,13 @@ export default function Map({ setDataBounds, memories, highlightedId }: IProps) 
                   zoom: 12,
                 }));
                 if (mapRef.current) {
-                  const bounds = mapRef.current.getMap().getBounds();
+                  const bounds = await mapRef.current.getMap().getBounds();
                   setDataBounds(JSON.stringify(bounds.toArray()));
                 }
               }
             }}
           />
-        </div>
+        </div> */}
 
         {memories.map((memory) => (
           <Marker

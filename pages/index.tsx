@@ -37,7 +37,7 @@ const parseBounds = (boundsString: string) => {
   };
 };
 
-export default function Home() {
+export default function Memory() {
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
   const [dataBounds, setDataBounds] = useLocalState<string>(
     "bounds",
