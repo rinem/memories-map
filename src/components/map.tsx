@@ -23,7 +23,7 @@ interface IProps {
 export default function Map({ setDataBounds, memories, highlightedId }: IProps) {
   const [selected, setSelected] = useState<MemorysQuery_memories | null>(null);
   const mapRef = useRef<ReactMapGL | null>(null);
-  const [viewport, setViewport] = useLocalState<ViewState>("viewport", {
+  const [viewport, setViewport] = useState({
     latitude: 28.63,
     longitude: 77.21,
     zoom: 10,
@@ -36,7 +36,7 @@ export default function Map({ setDataBounds, memories, highlightedId }: IProps) 
         width="100%"
         height="calc(100vh - 64px)"
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_API_TOKEN}
-        onViewportChange={(nextViewport) => setViewport(nextViewport)}
+        onViewportChange={(nextViewport) => setViewport({ ...nextViewport })}
         ref={(instance) => (mapRef.current = instance)}
         minZoom={5}
         maxZoom={15}
