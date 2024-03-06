@@ -22,9 +22,6 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
               />
             </a>
           </Link>
-          <div>
-            Capture Memories
-          </div>
           {authenticated ? (
             <>
               <Link href="/memories/add">

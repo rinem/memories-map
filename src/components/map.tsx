@@ -1,13 +1,12 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { Image } from "cloudinary-react";
-import ReactMapGL, { Marker, Popup, ViewState } from "react-map-gl";
+import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 // import mapboxgl from 'mapbox-gl';
 
-import { useLocalState } from "src/utils/useLocalState";
 import { MemoriesQuery_memories } from "src/generated/MemoriesQuery";
-// import { SearchBox } from "./searchBox";
+import { SearchBox } from "./searchBox";
 
 // The following is required to stop "npm build" from transpiling mapbox code.
 // notice the exclamation point in the import.
@@ -54,8 +53,8 @@ export default function Map({ setDataBounds, memories, highlightedId }: IProps) 
           }
         }}
       >
-        {/* <div className="absolute top-0 w-full z-10 p-4"> */}
-          {/* <SearchBox
+        <div className="absolute top-0 w-full z-10 p-4">
+          <SearchBox
             defaultValue=""
             onSelectMessage={async (_address, latitude, longitude) => {
               if (latitude && longitude) {
@@ -72,7 +71,7 @@ export default function Map({ setDataBounds, memories, highlightedId }: IProps) 
               }
             }}
           />
-        </div> */}
+        </div>
 
         {memories.map((memory) => (
           <Marker
