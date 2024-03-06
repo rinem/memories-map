@@ -23,7 +23,7 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
             </a>
           </Link>
           <div>
-            Happy Birdday Bish 🎈🥳🎉
+            Capture Memories
           </div>
           {authenticated ? (
             <>
@@ -33,10 +33,9 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
               <button onClick={logout}>Logout</button>
             </>
           ) : (
-            <></>
-            // <Link href="/auth">
-            //   <a>Login / Signup</a>
-            // </Link>
+            <Link href="/auth">
+              <a>Login / Signup</a>
+            </Link>
           )}
         </div>
       </nav>
